@@ -1,6 +1,6 @@
 (function () {
   var CHECK_URL = 'https://gdeya.bolotov.dev/geo/ru';
-  var TIMEOUT_MS = 3000;
+  var TIMEOUT_MS = 1500;
   var KEY = 'gdeya2026';
 
   function decode(encoded) {
@@ -17,14 +17,14 @@
 
   function reveal(attr) {
     document.querySelectorAll('[data-gdeya-ru]').forEach(function (el) {
+      el.style.opacity = '0';
       el.innerHTML = decode(el.getAttribute(attr));
-      el.style.display = '';
+      requestAnimationFrame(function () {
+        el.style.transition = 'opacity 0.5s ease';
+        el.style.opacity = '1';
+      });
     });
   }
-
-  document.querySelectorAll('[data-gdeya-ru]').forEach(function (el) {
-    el.style.display = 'none';
-  });
 
   var controller = new AbortController();
   var timer = setTimeout(function () { controller.abort(); }, TIMEOUT_MS);
