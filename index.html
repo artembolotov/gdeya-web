@@ -1,11 +1,467 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>gdeya</title>
+  <title>gdeya — geo-контент без VPN</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fff;
+      --text: #111;
+      --muted: #555;
+      --border: #ddd;
+      --code-bg: #f5f5f5;
+      --accent: #111;
+      --btn-bg: #111;
+      --btn-text: #fff;
+      --radius: 6px;
+      --max: 680px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 64px 0 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 8vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .hero .tagline {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .hero .lead {
+      font-size: 1rem;
+      color: var(--text);
+      max-width: 560px;
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    section h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── How it works ── */
+    .steps ol {
+      list-style: none;
+      counter-reset: step;
+    }
+    .steps ol li {
+      counter-increment: step;
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .steps ol li::before {
+      content: counter(step);
+      min-width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── Use cases ── */
+    .usecases ul {
+      list-style: none;
+    }
+    .usecases ul li {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+    .usecases ul li .tag {
+      font-family: monospace;
+      font-size: 0.78rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── Generator ── */
+    .generator-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .field textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 10px 12px;
+      font-family: monospace;
+      font-size: 0.88rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      resize: vertical;
+      line-height: 1.5;
+      transition: border-color 0.15s;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .field select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .field select:focus { outline: none; border-color: var(--accent); }
+
+    .field-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .field-row .field { flex: 1; min-width: 160px; }
+
+    button.generate {
+      align-self: flex-start;
+      padding: 10px 24px;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    button.generate:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    button.generate:not(:disabled):hover { opacity: 0.8; }
+
+    /* ── Result ── */
+    #result { display: none; margin-top: 32px; }
+    #result.visible { display: block; }
+
+    .step-block { margin-bottom: 28px; }
+    .step-block .step-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+    .step-block .step-hint {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .step-block .step-hint code {
+      font-family: monospace;
+      background: var(--code-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* Code block with copy button */
+    .code-wrap { position: relative; }
+    .code-wrap pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      padding-right: 96px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-family: inherit;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { color: #2a7a2a; border-color: #2a7a2a; }
+
+    /* ── Preview ── */
+    .preview-wrap {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .preview-item { flex: 1; min-width: 200px; }
+    .preview-item .preview-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .preview-item .preview-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      min-height: 48px;
+      font-size: 0.9rem;
+      background: var(--code-bg);
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 28px 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    footer a { color: inherit; }
+
+    @media (max-width: 480px) {
+      .hero { padding: 40px 0 32px; }
+      section { padding: 28px 0; }
+      .preview-wrap { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
-  <p>hello</p>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <header class="hero">
+    <h1>gdeya</h1>
+    <p class="tagline">«Видишь суслика? А он есть»</p>
+    <p class="lead">На вашей странице два варианта контента — россияне видят один, все остальные другой, а в исходном коде — нечитаемая каша.</p>
+  </header>
+
+  <!-- Как это работает -->
+  <section class="steps">
+    <h2>Как это работает</h2>
+    <ol>
+      <li>Скрипт делает один незаметный запрос в интернет — пользователь этого не замечает.</li>
+      <li>Запрос прошёл — пользователь не в России, показываем международный вариант.</li>
+      <li>Запрос заблокирован или завис за 1,5 секунды — Россия, показываем российский вариант.</li>
+      <li>Оба варианта зашифрованы прямо в коде страницы — в исходнике их не прочитать.</li>
+    </ol>
+  </section>
+
+  <!-- Для кого -->
+  <section class="usecases">
+    <h2>Для кого</h2>
+    <ul>
+      <li>
+        <span class="tag">логотип</span>
+        <span>Instagram запрещён в России — покажите альтернативу российским пользователям, а всем остальным — оригинал.</span>
+      </li>
+      <li>
+        <span class="tag">цены</span>
+        <span>Разные офферы или цены для разных аудиторий — без двух отдельных сайтов.</span>
+      </li>
+      <li>
+        <span class="tag">контакты</span>
+        <span>Российский номер телефона — для России, международный мессенджер — для всех остальных.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Генератор -->
+  <section>
+    <h2>Генератор</h2>
+    <div class="generator-form">
+      <div class="field">
+        <label for="txt-ru">Контент для России</label>
+        <textarea id="txt-ru" placeholder="Текст или HTML..."></textarea>
+      </div>
+      <div class="field">
+        <label for="txt-intl">Контент для всех остальных</label>
+        <textarea id="txt-intl" placeholder="Текст или HTML..."></textarea>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="sel-tag">Тег-обёртка</label>
+          <select id="sel-tag">
+            <option value="span">span — строчный</option>
+            <option value="div" selected>div — блочный</option>
+            <option value="p">p — абзац</option>
+          </select>
+        </div>
+      </div>
+      <button class="generate" id="btn-generate" disabled>Сгенерировать</button>
+    </div>
+
+    <div id="result">
+
+      <div class="step-block">
+        <div class="step-title">Шаг 1 — один раз на всю страницу</div>
+        <div class="step-hint">Добавьте в <code>&lt;head&gt;</code> вашего сайта один раз — сколько бы сниппетов вы ни вставляли.</div>
+        <div class="code-wrap">
+          <pre id="code-step1"></pre>
+          <button class="copy-btn" data-target="code-step1">скопировать</button>
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-title">Шаг 2 — вставить в нужное место на странице</div>
+        <div class="step-hint">Вставьте этот фрагмент туда, где должен появиться контент.</div>
+        <div class="code-wrap">
+          <pre id="code-step2"></pre>
+          <button class="copy-btn" data-target="code-step2">скопировать</button>
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-title">Шаг 3 — превью</div>
+        <div class="preview-wrap">
+          <div class="preview-item">
+            <div class="preview-label">Видят в России</div>
+            <div class="preview-box" id="preview-ru"></div>
+          </div>
+          <div class="preview-item">
+            <div class="preview-label">Видят все остальные</div>
+            <div class="preview-box" id="preview-intl"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    gdeya &mdash; <a href="https://bolotov.dev">bolotov.dev</a>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var KEY = 'gdeya2026';
+  var LOADER_TAG = '<script src="https://gdeya.bolotov.dev/loader.v1.js" defer><\/script>';
+
+  function encode(text) {
+    var keyBytes = new TextEncoder().encode(KEY);
+    var inputBytes = new TextEncoder().encode(text);
+    var result = new Uint8Array(inputBytes.length);
+    for (var i = 0; i < inputBytes.length; i++) {
+      result[i] = inputBytes[i] ^ keyBytes[i % keyBytes.length];
+    }
+    var binary = '';
+    result.forEach(function (b) { binary += String.fromCharCode(b); });
+    return btoa(binary);
+  }
+
+  var ruEl   = document.getElementById('txt-ru');
+  var intlEl = document.getElementById('txt-intl');
+  var tagEl  = document.getElementById('sel-tag');
+  var btn    = document.getElementById('btn-generate');
+  var result = document.getElementById('result');
+
+  function checkBtn() {
+    btn.disabled = !(ruEl.value.trim() && intlEl.value.trim());
+  }
+  ruEl.addEventListener('input', checkBtn);
+  intlEl.addEventListener('input', checkBtn);
+
+  btn.addEventListener('click', function () {
+    var ru      = ruEl.value;
+    var intl    = intlEl.value;
+    var tag     = tagEl.value;
+    var encRu   = encode(ru);
+    var encIntl = encode(intl);
+    var snippet = '<' + tag + ' data-gdeya-ru="' + encRu + '" data-gdeya-intl="' + encIntl + '"></' + tag + '>';
+
+    document.getElementById('code-step1').textContent = LOADER_TAG;
+    document.getElementById('code-step2').textContent = snippet;
+    document.getElementById('preview-ru').innerHTML   = ru;
+    document.getElementById('preview-intl').innerHTML = intl;
+
+    result.classList.add('visible');
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.classList.contains('copy-btn')) return;
+    var targetId = e.target.getAttribute('data-target');
+    var text = document.getElementById(targetId).textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      e.target.textContent = 'скопировано!';
+      e.target.classList.add('copied');
+      setTimeout(function () {
+        e.target.textContent = 'скопировать';
+        e.target.classList.remove('copied');
+      }, 2000);
+    }).catch(function () {
+      var el = document.getElementById(targetId);
+      var sel = window.getSelection();
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    });
+  });
+})();
+</script>
 </body>
 </html>
