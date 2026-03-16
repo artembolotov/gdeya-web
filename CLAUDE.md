@@ -176,5 +176,6 @@ GitHub Pages deploys automatically. The CNAME file routes `gdeya-pages.bolotov.d
 - **Do not rename or move `geo/ru`** — this path is hardcoded in `loader.v1.js` and changing it breaks all deployed integrations.
 - **Do not change the data attribute names** (`data-gdeya-ru`, `data-gdeya-intl`) — they are part of the public API used by all sites that have embedded the loader.
 - **Maintain ES5 syntax** in `loader.v1.js` for maximum compatibility, even though modern browser APIs are required.
-- **The loader script is externally hosted** — any changes to `loader.v1.js` take effect immediately for all sites using it. Test carefully.
+- **Never make breaking changes to `loader.v1.js`** — this file is already embedded on third-party sites via CDN URL. Any change that alters behavior (detection logic, attribute names, timing, encoding) will silently break those sites. Instead, create a new versioned file (e.g. `loader.v2.js`) and update `index.html` to reference the new URL. The old version must remain unchanged and functional indefinitely.
+- **Safe edits to `loader.v1.js`** (the only ones allowed in-place): fixing a clear bug where the current behavior is unambiguously wrong, or purely cosmetic changes (comments, whitespace) that have zero runtime effect.
 - **Do not add `Cache-Control` or CDN configuration to the repo** — CDN settings are managed separately and are not part of this repository.
