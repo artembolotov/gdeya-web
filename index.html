@@ -86,25 +86,149 @@
       margin-bottom: 20px;
     }
 
-    /* ── Steps ── */
-    .steps ol { list-style: none; counter-reset: s; }
-    .steps li {
-      counter-increment: s;
+    /* ── Steps / flowchart ── */
+    .flow {
       display: flex;
-      gap: 14px;
-      margin-bottom: 14px;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
     }
-    .steps li::before {
-      content: counter(s);
-      min-width: 24px; height: 24px;
-      border-radius: 50%;
+    .flow-box {
+      padding: 9px 20px;
       border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.72rem; font-weight: 700;
+      border-radius: var(--radius);
+      background: var(--code-bg);
+      font-size: 0.92rem;
+      text-align: center;
+      max-width: 260px;
+      width: 100%;
+    }
+    .flow-diamond-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .flow-diamond {
+      position: relative;
+      width: 160px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .flow-diamond::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      transform: rotate(12deg) scaleX(1.7);
+      border-radius: 4px;
+    }
+    .flow-diamond-label {
+      position: relative;
+      font-size: 0.88rem;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .flow-note {
+      font-size: 0.72rem;
       color: var(--muted);
+      margin-top: 4px;
+      text-align: center;
+    }
+    .flow-arrow {
+      width: 1px;
+      height: 28px;
+      background: var(--border);
       flex-shrink: 0;
-      margin-top: 3px;
+    }
+    .flow-branches {
+      display: flex;
+      gap: 0;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+    }
+    .flow-branches::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 50%;
+      height: 1px;
+      background: var(--border);
+      transform: translateX(-100%);
+    }
+    .flow-branches::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 50%;
+      height: 1px;
+      background: var(--border);
+    }
+    .flow-branch {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .flow-branch-line {
+      width: 1px;
+      height: 28px;
+      background: var(--border);
+    }
+    .flow-branch-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .flow-outcome {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--code-bg);
+      font-size: 0.85rem;
+      text-align: center;
+      width: 100%;
+      max-width: 200px;
+    }
+    .flow-outcome-title {
+      font-weight: 600;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+    }
+    .flow-outcome-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .flow-paras {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 480px;
+      width: 100%;
+    }
+    .flow-paras p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+    @media (max-width: 480px) {
+      .flow-outcome { font-size: 0.78rem; padding: 8px 10px; }
+      .flow-outcome-title { font-size: 0.75rem; }
+      .flow-branches { max-width: 100%; }
     }
 
     /* ── Use cases ── */
@@ -266,12 +390,45 @@
 
   <section class="steps">
     <h2>Как это работает</h2>
-    <ol>
-      <li>Скрипт делает один незаметный запрос в интернет — пользователь этого не замечает.</li>
-      <li>Запрос прошёл — пользователь не в России, показываем международный вариант.</li>
-      <li>Запрос заблокирован или завис за 1,5 секунды — Россия, показываем российский вариант.</li>
-      <li>Оба варианта зашифрованы прямо в коде страницы — в исходнике их не прочитать.</li>
-    </ol>
+    <div class="flow">
+
+      <div class="flow-box">Посетитель заходит на сайт</div>
+      <div class="flow-arrow"></div>
+
+      <div class="flow-diamond-wrap">
+        <div class="flow-diamond">
+          <span class="flow-diamond-label">пользователь<br>из России?</span>
+        </div>
+        <div class="flow-note">определяем по ip провайдера</div>
+      </div>
+
+      <div class="flow-arrow"></div>
+
+      <div class="flow-branches">
+        <div class="flow-branch">
+          <div class="flow-branch-line"></div>
+          <div class="flow-branch-label">Да</div>
+          <div class="flow-outcome">
+            <div class="flow-outcome-title">Россия</div>
+            <div class="flow-outcome-desc">показываем российский вариант</div>
+          </div>
+        </div>
+        <div class="flow-branch">
+          <div class="flow-branch-line"></div>
+          <div class="flow-branch-label">Нет</div>
+          <div class="flow-outcome">
+            <div class="flow-outcome-title">Весь мир</div>
+            <div class="flow-outcome-desc">показываем международный вариант</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-paras">
+        <p>Оба варианта зашифрованы прямо в коде страницы.</p>
+        <p>Проверка — один запрос к CDN без загрузки данных, только ответ. Работает мгновенно.</p>
+      </div>
+
+    </div>
   </section>
 
   <section class="usecases">
