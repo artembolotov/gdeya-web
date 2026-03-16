@@ -14,6 +14,8 @@
       --border:   #d3d1c7;
       --code-bg:  #f5f4ef;
       --accent:   #d85a30;
+      --accent-bg: rgba(216, 90, 48, 0.06);
+      --accent-border: rgba(216, 90, 48, 0.18);
       --radius:   6px;
       --max:      680px;
       --mono:     'SF Mono','Fira Code','Cascadia Code','JetBrains Mono','Courier New',monospace;
@@ -26,6 +28,8 @@
         --border:  #2e2e2b;
         --code-bg: #222220;
         --accent:  #f0a030;
+        --accent-bg: rgba(240, 160, 48, 0.07);
+        --accent-border: rgba(240, 160, 48, 0.2);
       }
     }
 
@@ -359,6 +363,183 @@
       font-size: 0.9rem;
     }
 
+    /* ── Toggle switch ── */
+    .toggle-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .toggle-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.3s;
+      user-select: none;
+      cursor: pointer;
+    }
+    .toggle-label.active { color: var(--text); }
+    .toggle-track {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+      flex-shrink: 0;
+    }
+    .toggle-track[data-state="intl"] {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: var(--bg);
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .toggle-track[data-state="intl"] .toggle-thumb {
+      transform: translateX(24px);
+    }
+
+    /* ── Mock page ── */
+    .mock-page {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .mock-chrome {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .mock-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .mock-url {
+      flex: 1;
+      margin-left: 6px;
+      padding: 4px 10px;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      background: var(--code-bg);
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .mock-body {
+      padding: 28px 24px;
+    }
+    .mock-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mock-brand {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 1.1rem;
+      background: var(--accent-bg);
+      border-radius: 4px;
+      padding: 2px 6px;
+      border: 1px solid var(--accent-border);
+      display: inline-grid;
+    }
+    .mock-brand .brand-variant {
+      grid-area: 1 / 1;
+      white-space: nowrap;
+      transition: opacity 0.4s, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mock-brand .brand-variant.hidden-left {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    .mock-brand .brand-variant.hidden-right {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    .mock-nav {
+      display: flex;
+      gap: 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .mock-intro {
+      margin-bottom: 24px;
+    }
+    .mock-intro h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .mock-intro p {
+      font-size: 0.86rem;
+      color: var(--muted);
+      max-width: 480px;
+    }
+
+    /* ── Geo-block ── */
+    .geo-block {
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .geo-slider {
+      display: flex;
+      width: 200%;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .geo-slider[data-active="ru"] {
+      transform: translateX(0);
+    }
+    .geo-slider[data-active="intl"] {
+      transform: translateX(-50%);
+    }
+    .geo-variant {
+      width: 50%;
+      flex-shrink: 0;
+      padding: 16px 18px;
+      transition: opacity 0.4s;
+    }
+    .geo-slider[data-active="ru"] .geo-variant:nth-child(2),
+    .geo-slider[data-active="intl"] .geo-variant:nth-child(1) {
+      opacity: 0.3;
+    }
+    .geo-variant .label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .geo-variant .value {
+      font-size: 0.92rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     /* ── Footer ── */
     footer {
       padding: 28px 0;
@@ -371,6 +552,8 @@
     @media (max-width: 480px) {
       .hero { padding: 40px 0 32px; }
       section { padding: 28px 0; }
+      .mock-body { padding: 20px 16px; }
+      .mock-nav { display: none; }
       .preview-wrap { flex-direction: column; }
     }
   </style>
@@ -385,6 +568,96 @@
     <p class="tagline">«Видишь суслика? А он есть»</p>
     <p class="lead">Любой блок вашего сайта может выглядеть по-разному в России и за её пределами.</p>
   </header>
+
+  <section>
+    <h2>Интерактивная демка</h2>
+    <!-- Toggle -->
+    <div class="toggle-bar">
+      <span class="toggle-label active" data-geo="ru">🇷🇺 Россия</span>
+      <div class="toggle-track" id="toggle" data-state="ru" role="switch" aria-checked="false" tabindex="0">
+        <div class="toggle-thumb"></div>
+      </div>
+      <span class="toggle-label" data-geo="intl">🌍 Весь мир</span>
+    </div>
+    <!-- Mock page -->
+    <div class="mock-page">
+      <div class="mock-chrome">
+        <div class="mock-dot"></div>
+        <div class="mock-dot"></div>
+        <div class="mock-dot"></div>
+        <div class="mock-url">mycompany.com</div>
+      </div>
+      <div class="mock-body">
+        <!-- Static header -->
+        <div class="mock-header">
+          <div class="mock-brand">
+            <span class="brand-variant" data-geo="ru">МояКомпания</span>
+            <span class="brand-variant hidden-right" data-geo="intl">MyCompany</span>
+          </div>
+          <div class="mock-nav">
+            <span>О нас</span>
+            <span>Услуги</span>
+            <span>Контакты</span>
+          </div>
+        </div>
+        <!-- Static intro -->
+        <div class="mock-intro">
+          <h3>Добро пожаловать</h3>
+          <p>Мы делаем отличные продукты для клиентов по всему миру. Этот текст одинаков для всех — он не меняется.</p>
+        </div>
+        <!-- Geo-block 1: Contacts -->
+        <div class="geo-block">
+          <div class="geo-slider" data-active="ru">
+            <div class="geo-variant">
+              <div class="label">Контакты</div>
+              <div class="value">+7 (495) 123-45-67</div>
+            </div>
+            <div class="geo-variant">
+              <div class="label">Контакты</div>
+              <div class="value">WhatsApp*</div>
+            </div>
+          </div>
+        </div>
+        <!-- Geo-block 2: Social -->
+        <div class="geo-block">
+          <div class="geo-slider" data-active="ru">
+            <div class="geo-variant">
+              <div class="label">Мы в соцсетях</div>
+              <div class="value">VK, Одноклассники</div>
+            </div>
+            <div class="geo-variant">
+              <div class="label">Мы в соцсетях</div>
+              <div class="value">VK, Instagram*</div>
+            </div>
+          </div>
+        </div>
+        <!-- Geo-block 3: Pricing -->
+        <div class="geo-block">
+          <div class="geo-slider" data-active="ru">
+            <div class="geo-variant">
+              <div class="label">Тариф</div>
+              <div class="value">
+                <span style="font-family: var(--mono); font-size: 1.1rem;">990 ₽</span>
+                <span style="font-size: 0.78rem; color: var(--muted);">/ мес</span>
+              </div>
+            </div>
+            <div class="geo-variant">
+              <div class="label">Pricing</div>
+              <div class="value">
+                <span style="font-family: var(--mono); font-size: 1.1rem;">$9</span>
+                <span style="font-size: 0.78rem; color: var(--muted);">/ mo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Footer with inline brand swap -->
+        <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border);">
+          <p style="font-size: 0.78rem; color: var(--muted);">© 2026 <span class="mock-brand" style="font-size: 0.78rem; padding: 1px 4px; vertical-align: baseline;"><span class="brand-variant" data-geo="ru">МояКомпания</span><span class="brand-variant hidden-right" data-geo="intl">MyCompany</span></span> — все права защищены.</p>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top: 14px; font-size: 0.7rem; color: var(--muted); line-height: 1.5;">* Компания Meta, которой принадлежат WhatsApp и Instagram, признана экстремистской и запрещена в&nbsp;России.</p>
+  </section>
 
   <section class="steps">
     <h2>Как это работает</h2>
@@ -502,6 +775,45 @@
   </footer>
 
 </div>
+<script>
+(function () {
+  var toggle = document.getElementById('toggle');
+  var labelRu = document.querySelector('.toggle-label[data-geo="ru"]');
+  var labelIntl = document.querySelector('.toggle-label[data-geo="intl"]');
+  var sliders = document.querySelectorAll('.geo-slider');
+  var brandVariants = document.querySelectorAll('.brand-variant');
+  var state = 'ru';
+  function setState(newState) {
+    state = newState;
+    toggle.dataset.state = state;
+    toggle.setAttribute('aria-checked', state === 'intl' ? 'true' : 'false');
+    labelRu.classList.toggle('active', state === 'ru');
+    labelIntl.classList.toggle('active', state === 'intl');
+    sliders.forEach(function (s) {
+      s.dataset.active = state;
+    });
+    brandVariants.forEach(function (el) {
+      var isRu = el.dataset.geo === 'ru';
+      var show = (state === 'ru' && isRu) || (state === 'intl' && !isRu);
+      el.classList.remove('hidden-left', 'hidden-right');
+      if (!show) {
+        el.classList.add(isRu ? 'hidden-left' : 'hidden-right');
+      }
+    });
+  }
+  toggle.addEventListener('click', function () {
+    setState(state === 'ru' ? 'intl' : 'ru');
+  });
+  toggle.addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      setState(state === 'ru' ? 'intl' : 'ru');
+    }
+  });
+  labelRu.addEventListener('click', function () { setState('ru'); });
+  labelIntl.addEventListener('click', function () { setState('intl'); });
+})();
+</script>
 <script>
 (function () {
   var KEY = 'gdeya2026';
