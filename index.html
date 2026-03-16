@@ -300,6 +300,11 @@
     .toggle-track[data-state="intl"] .toggle-thumb {
       transform: translateX(24px);
     }
+    @media (prefers-color-scheme: dark) {
+      .toggle-track { border-color: var(--muted); }
+      .toggle-thumb { background: var(--text); }
+      .toggle-track[data-state="intl"] .toggle-thumb { background: #fff; }
+    }
 
     /* ── Mock page ── */
     .mock-page {
