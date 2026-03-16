@@ -722,7 +722,7 @@
   var btn    = document.getElementById('btn-generate');
   var result = document.getElementById('result');
 
-  function sync() { btn.disabled = !(ruEl.value.trim() && intlEl.value.trim()); }
+  function sync() { btn.disabled = !(ruEl.value.trim() || intlEl.value.trim()); }
   ruEl.addEventListener('input', sync);
   intlEl.addEventListener('input', sync);
 
@@ -734,8 +734,8 @@
     document.getElementById('code-step1').textContent = LOADER;
     document.getElementById('code-step2').textContent =
       '<' + tag + ' data-gdeya-ru="' + encRu + '" data-gdeya-intl="' + encIntl + '"></' + tag + '>';
-    document.getElementById('preview-ru').innerHTML   = ruEl.value;
-    document.getElementById('preview-intl').innerHTML = intlEl.value;
+    document.getElementById('preview-ru').innerHTML   = ruEl.value   || '<em style="color:var(--muted);font-size:0.82rem">— пусто —</em>';
+    document.getElementById('preview-intl').innerHTML = intlEl.value || '<em style="color:var(--muted);font-size:0.82rem">— пусто —</em>';
 
     result.classList.add('on');
     result.scrollIntoView({ behavior: 'smooth', block: 'start' });
