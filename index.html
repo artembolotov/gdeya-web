@@ -90,147 +90,39 @@
       margin-bottom: 20px;
     }
 
-    /* ── Steps / flowchart ── */
-    .flow {
+    /* ── How it works ── */
+    .how-steps {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 0;
+      gap: 20px;
+      counter-reset: step;
     }
-    .flow-box {
-      padding: 9px 20px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--code-bg);
-      font-size: 0.92rem;
-      text-align: center;
-      max-width: 260px;
-      width: 100%;
-    }
-    .flow-diamond-wrap {
+    .how-step {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
+      gap: 14px;
+      align-items: baseline;
     }
-    .flow-diamond {
-      position: relative;
-      width: 160px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .flow-diamond::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-    }
-    .flow-diamond-label {
-      position: relative;
-      font-size: 0.88rem;
-      text-align: center;
-      line-height: 1.3;
-    }
-    .flow-note {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 4px;
-      text-align: center;
-    }
-    .flow-arrow {
-      width: 1px;
-      height: 28px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
-    .flow-branches {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      width: 100%;
-      max-width: 480px;
-      position: relative;
-    }
-    .flow-branches::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: calc(25% - 4px);
-      width: calc(25% + 4px);
-      height: 1px;
-      background: var(--border);
-    }
-    .flow-branches::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: calc(25% + 4px);
-      height: 1px;
-      background: var(--border);
-    }
-    .flow-branch {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-    }
-    .flow-branch-line {
-      width: 1px;
-      height: 28px;
-      background: var(--border);
-    }
-    .flow-branch-label {
-      font-size: 0.72rem;
+    .how-step::before {
+      counter-increment: step;
+      content: counter(step);
+      font-family: var(--mono);
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--accent);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      flex-shrink: 0;
+      width: 20px;
+      text-align: right;
     }
-    .flow-outcome {
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+    .how-step p {
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+    .how-step code {
+      font-family: var(--mono);
+      font-size: 0.82em;
       background: var(--code-bg);
-      font-size: 0.85rem;
-      text-align: center;
-      width: 100%;
-      max-width: 200px;
-    }
-    .flow-outcome-title {
-      font-weight: 600;
-      font-size: 0.82rem;
-      margin-bottom: 4px;
-    }
-    .flow-outcome-desc {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.4;
-    }
-    .flow-paras {
-      margin-top: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-width: 480px;
-      width: 100%;
-    }
-    .flow-paras p {
-      font-size: 0.9rem;
-      color: var(--muted);
-      text-align: left;
-      line-height: 1.5;
-    }
-    @media (max-width: 480px) {
-      .flow-outcome { font-size: 0.78rem; padding: 8px 10px; }
-      .flow-outcome-title { font-size: 0.75rem; }
-      .flow-branches { max-width: 100%; }
+      padding: 1px 5px;
+      border-radius: 3px;
     }
 
     /* ── Use cases ── */
@@ -658,46 +550,24 @@
     <p style="margin-top: 14px; font-size: 0.7rem; color: var(--muted); line-height: 1.5;">* Компания Meta, которой принадлежат WhatsApp и Instagram, признана экстремистской и запрещена в&nbsp;России.</p>
   </section>
 
-  <section class="steps">
+  <section>
     <h2>Как это работает</h2>
-    <div class="flow">
-
-      <div class="flow-box">Посетитель заходит на сайт</div>
-      <div class="flow-arrow"></div>
-
-      <div class="flow-diamond-wrap">
-        <div class="flow-diamond">
-          <span class="flow-diamond-label">пользователь<br>из России?</span>
-        </div>
-        <div class="flow-note">определяем по ip провайдера</div>
+    <div class="how-steps">
+      <div class="how-step">
+        <p>Вы задаёте два варианта содержимого — один увидят пользователи из&nbsp;России, другой — все остальные. Текст, ссылка, кнопка, целый блок — что угодно.</p>
       </div>
-
-      <div class="flow-arrow"></div>
-
-      <div class="flow-branches">
-        <div class="flow-branch">
-          <div class="flow-branch-line"></div>
-          <div class="flow-branch-label">Да</div>
-          <div class="flow-outcome">
-            <div class="flow-outcome-title">Россия</div>
-            <div class="flow-outcome-desc">показываем российский вариант</div>
-          </div>
-        </div>
-        <div class="flow-branch">
-          <div class="flow-branch-line"></div>
-          <div class="flow-branch-label">Нет</div>
-          <div class="flow-outcome">
-            <div class="flow-outcome-title">Весь мир</div>
-            <div class="flow-outcome-desc">показываем международный вариант</div>
-          </div>
-        </div>
+      <div class="how-step">
+        <p>Сервис генерирует фрагмент кода, который вы вставляете в&nbsp;то место страницы, где нужно показывать разное содержимое.</p>
       </div>
-
-      <div class="flow-paras">
-        <p>Оба варианта зашифрованы прямо в коде страницы.</p>
-        <p>Проверка — один запрос к CDN без загрузки данных, только ответ. Работает мгновенно.</p>
+      <div class="how-step">
+        <p>Оба варианта будут встроены в&nbsp;страницу в&nbsp;закодированном виде — в&nbsp;исходном коде их не&nbsp;прочитать.</p>
       </div>
-
+      <div class="how-step">
+        <p>При загрузке страницы скрипт по&nbsp;IP-адресу провайдера определяет, находится&nbsp;ли пользователь в&nbsp;России.</p>
+      </div>
+      <div class="how-step">
+        <p>За пределами России — показываем международный вариант. В&nbsp;остальных случаях (ошибка или таймаут) — российский.</p>
+      </div>
     </div>
   </section>
 
