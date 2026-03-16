@@ -57,5 +57,7 @@
   check();
 
   window.addEventListener('online', check);
-  if (navigator.connection) navigator.connection.addEventListener('change', check);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') check();
+  });
 })();
