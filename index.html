@@ -439,12 +439,21 @@
 
     /* ── Footer ── */
     footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px 24px;
       padding: 28px 0;
       font-size: 0.8rem;
       color: var(--muted);
     }
     footer a { color: inherit; text-decoration: none; }
     footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 16px; }
+    @media (max-width: 480px) {
+      .footer-links { margin-top: 4px; }
+    }
 
     @media (max-width: 480px) {
       .hero { padding: 40px 0 32px; }
@@ -581,7 +590,7 @@
     <ul>
       <li><strong>Логотип.</strong> С 1 марта 2026 года государство заботливо требует русифицировать всё, что видит потребитель. Покажите в России кириллицу, а всему остальному миру — оригинал.</li>
       <li><strong>Цены.</strong> Разные офферы или цены для разных аудиторий — без двух отдельных сайтов.</li>
-      <li><strong>Соцсети.</strong> В России покажите VK и MAX, а за её пределами — те, которыми там пользуются.</li>
+      <li><strong>Соцсети.</strong> В России покажите VK и MAX, а за её пределами — те, которыми пользуются люди.</li>
     </ul>
   </section>
 
@@ -645,7 +654,11 @@
   </section>
 
   <footer>
-    гдеЯ<span style="color:var(--accent)">?</span> &mdash; <a href="https://bolotov.dev">bolotov.dev</a>
+    <a href="https://bolotov.dev" target="_blank" rel="noopener">bolotov.dev</a>
+    <span class="footer-links">
+      <a href="https://github.com/artembolotov/gdeya-web" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://finance.ozon.ru/apps/sbp/ozonbankpay/019cbe87-f409-7ca0-b28f-33a41e1de074" target="_blank" rel="noopener">поддержать рублём</a>
+    </span>
   </footer>
 
 </div>
